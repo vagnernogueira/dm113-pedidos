@@ -1,0 +1,87 @@
+@dm113_pedidos_HostAddress = http://localhost:5168
+
+GET {{dm113_pedidos_HostAddress}}/
+Accept: application/json
+
+###
+POST {{dm113_pedidos_HostAddress}}/Service.asmx
+Content-Type: application/xml
+Accept: application/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:ListarProdutos/>
+   </soapenv:Body>
+</soapenv:Envelope>
+###
+POST {{dm113_pedidos_HostAddress}}/Service.asmx
+Content-Type: application/xml
+Accept: application/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns:dm1="http://schemas.datacontract.org/2004/07/dm113_pedidos.Model">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:CriarProduto>
+         <tem:produto>
+         	  <dm1:IdProduto>8</dm1:IdProduto>
+	       <dm1:Nome>PlayStation Plus Essencial: Assinatura de 12 meses</dm1:Nome>
+            <dm1:Descricao>O PlayStation Plus Essencial é uma assinatura contínua com uma taxa recorrente automática</dm1:Descricao>
+            <dm1:PrecoUnitario>359.90</dm1:PrecoUnitario>
+         </tem:produto>
+      </tem:CriarProduto>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+###
+POST {{dm113_pedidos_HostAddress}}/Service.asmx
+Content-Type: application/xml
+Accept: application/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns:dm1="http://schemas.datacontract.org/2004/07/dm113_pedidos.Model">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:AtualizarProduto>
+         <tem:produto>
+            <dm1:IdProduto>8</dm1:IdProduto>
+            <dm1:Nome>PlayStation Plus Essencial: Assinatura de 12 meses</dm1:Nome>
+            <dm1:Descricao></dm1:Descricao>
+            <dm1:PrecoUnitario>600.00</dm1:PrecoUnitario>
+         </tem:produto>
+      </tem:AtualizarProduto>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+###
+POST {{dm113_pedidos_HostAddress}}/Service.asmx
+Content-Type: application/xml
+Accept: application/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:ExcluirProduto>
+         <tem:id>8</tem:id>
+      </tem:ExcluirProduto>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+### 
+POST {{dm113_pedidos_HostAddress}}/Service.asmx
+Content-Type: application/xml
+Accept: application/xml
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:ObterProdutoPorId>
+         <tem:id>7</tem:id>
+      </tem:ObterProdutoPorId>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+###
+
+POST {{dm113_pedidos_HostAddress}}/Service.asmx
+Content-Type: application/xml
+Accept: application/xml

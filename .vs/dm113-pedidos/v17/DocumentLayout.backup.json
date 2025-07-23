@@ -1,0 +1,57 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\vagner\\source\\repos\\dm113-pedidos\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A33C00E3-400A-4F13-8CBC-62AE974C81BA}|dm113-pedidos.csproj|c:\\users\\vagner\\source\\repos\\dm113-pedidos\\service\\pedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A33C00E3-400A-4F13-8CBC-62AE974C81BA}|dm113-pedidos.csproj|solutionrelative:service\\pedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A33C00E3-400A-4F13-8CBC-62AE974C81BA}|dm113-pedidos.csproj|c:\\users\\vagner\\source\\repos\\dm113-pedidos\\dm113-pedidos.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{A33C00E3-400A-4F13-8CBC-62AE974C81BA}|dm113-pedidos.csproj|solutionrelative:dm113-pedidos.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "dm113-pedidos.http",
+              "DocumentMoniker": "C:\\Users\\vagner\\source\\repos\\dm113-pedidos\\dm113-pedidos.http",
+              "RelativeDocumentMoniker": "dm113-pedidos.http",
+              "ToolTip": "C:\\Users\\vagner\\source\\repos\\dm113-pedidos\\dm113-pedidos.http",
+              "RelativeToolTip": "dm113-pedidos.http",
+              "ViewState": "AgIAAAIAAAAAAAAAAAA8wCQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
+              "WhenOpened": "2025-07-22T14:33:04.414Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PedidoService.cs",
+              "DocumentMoniker": "C:\\Users\\vagner\\source\\repos\\dm113-pedidos\\Service\\PedidoService.cs",
+              "RelativeDocumentMoniker": "Service\\PedidoService.cs",
+              "ToolTip": "C:\\Users\\vagner\\source\\repos\\dm113-pedidos\\Service\\PedidoService.cs",
+              "RelativeToolTip": "Service\\PedidoService.cs",
+              "ViewState": "AgIAAGIAAAAAAAAAAAAmwIoAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-22T13:38:44.226Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
