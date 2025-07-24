@@ -45,7 +45,7 @@ A escolha de utilizar o SOAP como tecnologia para o desenvolvimento do sistema d
 ### Divisão em dois projetos
 
 - **Serviço SOAP:** Projeto raiz `dm113-pedidos` que implementa o serviço SOAP utilizando SoapCore. 
-- **Cliente SOAP:** Projeto interno `ClientConsoleApp` que consome o serviço SOAP utilizando WCF.
+- **Cliente SOAP:** Projeto interno `ClientConsoleApp` que consome o serviço SOAP utilizando WCF com interface em console.
 ---
 
 ### Teste e execução
@@ -56,12 +56,13 @@ A escolha de utilizar o SOAP como tecnologia para o desenvolvimento do sistema d
    - O serviço estará disponível para consumo via HTTP.
 
 2. **Executar o Cliente SOAP:**
-   - Abra o projeto `ClientConsoleApp` no Visual Studio.
+   - O projeto `ClientConsoleApp` está presente dentro da solução `dm113-pedidos` no Visual Studio.
+   - Os fontes podem ser encontrados na pasta `ClientConsoleApp` dentro da solução.
    - Compile e execute o projeto.
-   - O cliente irá consumir o serviço SOAP exposto pelo projeto `dm113-pedidos`.
+   - Ao executar o projeto, será apresentado menu interativo em aplicativo de console para testar as operações do serviço SOAP.
 
 3. **Testar as Operações:**
-    - O projeto `ClientConsoleApp` possui um menu interativo que permite ao usuário testar as operações do serviço SOAP.
+    - O projeto `ClientConsoleApp` possui um menu interativo em aplicativo de console que permite ao usuário testar as operações do serviço SOAP.
     - O usuário pode inserir informações de pedidos, produtos e itens de pedidos, bem como consultar informações existentes.
     - Após executar o projeto, siga as instruções na tela para testar as operações.
 
