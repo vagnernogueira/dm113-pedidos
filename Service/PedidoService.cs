@@ -13,25 +13,22 @@ namespace dm113_pedidos.Service
         Pedido ObterPedidoPorId(int id);
 
         [OperationContract]
-        int CriarPedido(Pedido pedido);
+        string CriarPedido(Pedido pedido);
 
         [OperationContract]
-        void AtualizarPedido(Pedido pedido);
+        string AtualizarPedido(Pedido pedido);
 
         [OperationContract]
         void ExcluirPedido(int id);
 
         [OperationContract]
-        void AdicionarItemAoPedido(int pedidoId, ItemPedido item);
+        void AdicionarItemAoPedido(int idPedido, ItemPedido item);
 
         [OperationContract]
-        void RemoverItemDoPedido(int pedidoId, int itemId);
+        void RemoverItemDoPedido(int idPedido, int idItem);
 
         [OperationContract]
-        void AtualizarItemDoPedido(int pedidoId, ItemPedido item);
-
-        [OperationContract]
-        ItemPedido[] ListarItensDoPedido(int pedidoId);
+        ItemPedido[] ListarItensDoPedido(int idPedido);
 
         [OperationContract]
         Pedido[] ListarPedidosPorStatus(string status);
@@ -40,7 +37,7 @@ namespace dm113_pedidos.Service
         Pedido[] ListarPedidosPorCliente(string nomeCliente);
 
         [OperationContract]
-        Pedido[] ListarPedidosPorData(DateTime dataInicial, DateTime dataFinal);
+        Pedido[] ListarPedidosPorData(string dataInicial, string dataFinal);
 
         [OperationContract]
         Produto[] ListarProdutos();
@@ -59,7 +56,7 @@ namespace dm113_pedidos.Service
     }
     public class PedidoService : IPedidoService
     {
-        Dictionary<int, Produto> produtos = new Dictionary<int, Produto>()
+        Dictionary<int, Produto> produtos = new()
         {
             { 1, new Produto { IdProduto = 1, Nome = "Mario Kart World", Descricao = "Jogo de corrida para Nintendo Switch", PrecoUnitario = 499.90m } },
             { 2, new Produto { IdProduto = 2, Nome = "Cyberpunk 2077: Ultimate Edition", Descricao = "Jogo de RPG de ação", PrecoUnitario = 304.99m } },
@@ -69,9 +66,10 @@ namespace dm113_pedidos.Service
             { 6, new Produto { IdProduto = 6, Nome = "Console Xbox Series X", Descricao = "Console de videogame da Microsoft", PrecoUnitario = 5799.00m } },
             { 7, new Produto { IdProduto = 7, Nome = "Assinatura Game Pass 12 meses", Descricao = "Xbox Game Pass Ultimate Gpu 12 Meses Codigo Brasileiro Br", PrecoUnitario = 329.99m } }
         };
-
-        Dictionary<int, Pedido> pedidos = new Dictionary<int, Pedido>();
-
+        Dictionary<int, Pedido> pedidos = new();
+        /** 
+         * Métodos de serviço para gerenciar PRODUTOS.
+         */
         public Produto[] ListarProdutos()
         {
             return produtos.Values.ToArray();
@@ -80,10 +78,7 @@ namespace dm113_pedidos.Service
         {
             try
             {
-                if (produtos.ContainsKey(produto.IdProduto))
-                {
-                    throw new Exception("Não é possível cadastrar Produto com ID já cadastrado!");
-                }
+                AjustarDadosProduto(produto);
                 produtos.Add(produto.IdProduto, produto);
                 return produto.IdProduto.ToString();
             }
@@ -92,16 +87,11 @@ namespace dm113_pedidos.Service
                 return e.Message;
             }
         }
-
         public string AtualizarProduto(Produto produto)
         {
             try
             {
-                if (!produtos.ContainsKey(produto.IdProduto))
-                {
-                    throw new InvalidOperationException("ID não encontrado!");
-                }
-                produtos[produto.IdProduto] = produto;
+                produtos[produto.IdProduto] = AjustarDadosProduto(produto);
                 return produto.IdProduto.ToString();
             }
             catch (Exception e)
@@ -109,51 +99,50 @@ namespace dm113_pedidos.Service
                 return e.Message;
             }
         }
-
         public Produto ObterProdutoPorId(int id)
         {
             try
             {
-                if (!produtos.ContainsKey(id))
-                {
-                    throw new InvalidOperationException("ID não encontrado!");
-                }
-                return produtos[id];
+                return AjustarDadosProduto(produtos[id]);
             }
             catch (Exception)
             {
                 return new Produto();
             }
         }
-
         public void ExcluirProduto(int id)
         {
             try
             {
-                if (!produtos.ContainsKey(id))
-                {
-                    throw new InvalidOperationException("ID não encontrado!");
-                }
                 produtos.Remove(id);
             }
             catch (Exception)
             {
             }
         }
+        /** 
+         * Métodos de serviço para gerenciar PEDIDOS.
+         */
         public Pedido[] ListarPedidos()
         {
+            Console.WriteLine("ListarPedidos");
+            printKeys(pedidos);
             return pedidos.Values.ToArray();
         }
-
         public Pedido[] ListarPedidosPorCliente(string nomeCliente)
         {
-            return pedidos.Values.Where(p => p.NomeCliente.Equals(nomeCliente, StringComparison.OrdinalIgnoreCase)).ToArray();
+            return pedidos.Values
+                .Where(p => p.NomeCliente.Equals(nomeCliente.Trim(), StringComparison.OrdinalIgnoreCase))
+                .ToArray();
         }
 
-        public Pedido[] ListarPedidosPorData(DateTime dataInicial, DateTime dataFinal)
+        public Pedido[] ListarPedidosPorData(string dataInicial, string dataFinal)
         {
             return pedidos.Values
-                .Where(p => p.DataPedido >= dataInicial && p.DataPedido <= dataFinal)
+                .Where(p => 
+                    DateTime.TryParse(p.DataPedido, out DateTime dataPedido) && 
+                    dataPedido >= DateTime.Parse(dataInicial) && 
+                    dataPedido <= DateTime.Parse(dataFinal))
                 .ToArray();
         }
 
@@ -163,33 +152,56 @@ namespace dm113_pedidos.Service
                 .Where(p => p.Status.Equals(status, StringComparison.OrdinalIgnoreCase))
                 .ToArray();
         }
-
         public Pedido ObterPedidoPorId(int id)
         {
+            Console.WriteLine("ObterPedidoPorId");
+            printKeys(pedidos);
             try
             {
-                if(!pedidos.ContainsKey(id))
-                {
-                    throw new InvalidOperationException("ID não encontrado!");
-                }
-                return pedidos[id];
+                return AjustarDadosPedido(pedidos[id]);
             }
             catch (Exception)
             {
                 return new Pedido();
             }
         }
-
-        public int CriarPedido(Pedido pedido)
+        public string CriarPedido(Pedido pedido)
         {
             try
             {
-                if (produtos.ContainsKey(pedido.IdPedido))
+                AjustarDadosPedido(pedido);
+                pedidos.Add(pedido.IdPedido, pedido);
+                return pedido.IdPedido.ToString();
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+        public void ExcluirPedido(int id)
+        {
+            try
+            {
+                pedidos.Remove(id);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public string AtualizarPedido(Pedido pedido)
+        {
+            Console.WriteLine("AtualizarPedido");
+            printKeys(pedidos);
+            try
+            {
+                if (!pedidos.ContainsKey(pedido.IdPedido))
                 {
-                    throw new Exception("Não é possível cadastrar Produto com ID já cadastrado!");
+                    throw new KeyNotFoundException("Pedido não encontrado.");
                 }
-                produtos.Add(produto.IdProduto, produto);
-                return produto.IdProduto.ToString();
+                AjustarDadosPedido(pedido);
+                pedidos[pedido.IdPedido] = pedido;
+                return pedido.IdPedido.ToString();
             }
             catch (Exception e)
             {
@@ -197,34 +209,85 @@ namespace dm113_pedidos.Service
             }
         }
 
-        public void ExcluirPedido(int id)
+        public void AdicionarItemAoPedido(int idPedido, ItemPedido item)
         {
-            throw new NotImplementedException();
+            try
+            {
+                AjustarDadosPedido(pedidos[idPedido]).ItemPedidoList.Add(item);
+            }
+            catch (Exception)
+            {
+            }
         }
 
-        public void AtualizarPedido(Pedido pedido)
+        public ItemPedido[] ListarItensDoPedido(int idPedido)
         {
-            throw new NotImplementedException();
+            return AjustarDadosPedido(pedidos[idPedido]).ItemPedidoList.ToArray();
         }
 
-        public void AdicionarItemAoPedido(int pedidoId, ItemPedido item)
+        public void RemoverItemDoPedido(int idPedido, int idItem)
         {
-            throw new NotImplementedException();
+            AjustarDadosPedido(pedidos[idPedido]).ItemPedidoList.RemoveAll(item => item.IdItemPedido == idItem);
         }
 
-        public void AtualizarItemDoPedido(int pedidoId, ItemPedido item)
+        /**
+         * Métodos auxiliares para ajustar os dados antes de salvar.
+         */
+        private Produto AjustarDadosProduto(Produto? produto)
         {
-            throw new NotImplementedException();
+            if (produto == null)
+            {
+                produto = new Produto();
+            }
+            if (produto.IdProduto <= 0 || !produtos.ContainsKey(produto.IdProduto))
+            {
+                produto.IdProduto = produtos.Keys.Any() ? produtos.Keys.Max() + 1 : 1;
+            }
+            if (string.IsNullOrEmpty(produto.Nome))
+            {
+                produto.Nome = "Produto sem nome";
+            }
+            if (produto.PrecoUnitario <= 0)
+            {
+                produto.PrecoUnitario = 0.01m;
+            }
+            return produto;
         }
-
-        public ItemPedido[] ListarItensDoPedido(int pedidoId)
+        private Pedido AjustarDadosPedido(Pedido? pedido)
         {
-            throw new NotImplementedException();
+            if (pedido == null)
+            {
+                pedido = new Pedido();
+            }
+            if (pedido.IdPedido <= 0 || !pedidos.ContainsKey(pedido.IdPedido))
+            {
+                pedido.IdPedido = pedidos.Keys.Any() ? pedidos.Keys.Max() + 1 : 1;
+            }
+            if (string.IsNullOrEmpty(pedido.NomeCliente))
+            {
+                pedido.NomeCliente = "Cliente sem nome";
+            }
+            if (string.IsNullOrEmpty(pedido.DataPedido))
+            {
+                pedido.DataPedido = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            }
+            if (pedido.ItemPedidoList == null)
+            {
+                pedido.ItemPedidoList = new List<ItemPedido>();
+            }
+            pedido.Total = pedido.ItemPedidoList.Sum(item => item.PrecoUnitario * item.Quantidade);
+            if (string.IsNullOrEmpty(pedido.Status))
+            {
+                pedido.Status = "Pendente";
+            }
+            return pedido;
         }
-
-        public void RemoverItemDoPedido(int pedidoId, int itemId)
+        private void printKeys<T>(Dictionary<int, T> dict)
         {
-            throw new NotImplementedException();
+            foreach (var key in dict.Keys)
+            {
+                Console.WriteLine(key);
+            }
         }
     }
 }

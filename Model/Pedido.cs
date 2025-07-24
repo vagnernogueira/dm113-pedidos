@@ -8,13 +8,32 @@ namespace dm113_pedidos.Model
         [DataMember]
         public int IdPedido { get; set; }
         [DataMember]
-        public string NomeCliente { get; set; } = string.Empty;
+        public string NomeCliente { get; set; }
         [DataMember]
-        public DateTime DataPedido { get; set; } = DateTime.Now;
+        public string? DataPedido { get; set; }
         [DataMember]
-        public List<ItemPedido> ItemPedidoList { get; set; } = new List<ItemPedido>();
+        public List<ItemPedido>? ItemPedidoList { get; set; }
         [DataMember]
-        public decimal Total => ItemPedidoList.Sum(item => item.PrecoUnitario * item.Quantidade);
-        public string Status { get; set; } = "Pendente";
+        public decimal Total { get; set; }
+        [DataMember]
+        public string Status { get; set; }
+        public void Print()
+        {
+            Console.WriteLine($"Pedido ID: {IdPedido}");
+            Console.WriteLine($"Cliente: {NomeCliente}");
+            Console.WriteLine($"Data do Pedido: {DataPedido}");
+            Console.WriteLine($"Total: {Total:C}");
+            Console.WriteLine($"Status: {Status}");
+            if (ItemPedidoList != null && ItemPedidoList.Count > 0)
+            {
+                Console.WriteLine("Itens do Pedido:");
+                ItemPedidoList.ForEach(item => item.Print());
+            }
+            else
+            {
+                Console.WriteLine("Nenhum item no pedido.");
+            }
+            Console.WriteLine("\r\n");
+        }
     }
 }

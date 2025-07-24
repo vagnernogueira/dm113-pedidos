@@ -12,12 +12,17 @@ namespace dm113_pedidos.Model
         [DataMember]
         public int IdProduto { get; set; }
         [DataMember]
-        public string NomeProduto { get; set; } = string.Empty;
+        public string NomeProduto { get; set; }
         [DataMember]
         public int Quantidade { get; set; }
         [DataMember]
         public decimal PrecoUnitario { get; set; }
         [DataMember]
-        public decimal Total => Quantidade * PrecoUnitario;
+        public decimal Total { get; set; }
+
+        public void Print()
+        {
+            Console.WriteLine($"- Pedido ID: {IdPedido}, Item Pedido ID: {IdItemPedido}, Produto ID: {IdProduto}, Nome do Produto: {NomeProduto}, Quantidade: {Quantidade}, Preço Unitário: {PrecoUnitario:C}, Total: {Total:C}");
+        }
     }
 }
