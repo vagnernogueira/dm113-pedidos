@@ -18,18 +18,20 @@ namespace PedidoSoap
     public partial class Pedido : object
     {
         
-        private System.DateTime DataPedidoField;
+        private string DataPedidoField;
         
-        private int IdField;
+        private int IdPedidoField;
         
         private PedidoSoap.ItemPedido[] ItemPedidoListField;
         
         private string NomeClienteField;
         
+        private string StatusField;
+        
         private decimal TotalField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime DataPedido
+        public string DataPedido
         {
             get
             {
@@ -42,15 +44,15 @@ namespace PedidoSoap
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Id
+        public int IdPedido
         {
             get
             {
-                return this.IdField;
+                return this.IdPedidoField;
             }
             set
             {
-                this.IdField = value;
+                this.IdPedidoField = value;
             }
         }
         
@@ -77,6 +79,19 @@ namespace PedidoSoap
             set
             {
                 this.NomeClienteField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Status
+        {
+            get
+            {
+                return this.StatusField;
+            }
+            set
+            {
+                this.StatusField = value;
             }
         }
         
@@ -285,25 +300,22 @@ namespace PedidoSoap
         System.Threading.Tasks.Task<PedidoSoap.Pedido> ObterPedidoPorIdAsync(int id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPedidoService/CriarPedido", ReplyAction="http://tempuri.org/IPedidoService/CriarPedidoResponse")]
-        System.Threading.Tasks.Task<int> CriarPedidoAsync(PedidoSoap.Pedido pedido);
+        System.Threading.Tasks.Task<string> CriarPedidoAsync(PedidoSoap.Pedido pedido);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPedidoService/AtualizarPedido", ReplyAction="http://tempuri.org/IPedidoService/AtualizarPedidoResponse")]
-        System.Threading.Tasks.Task AtualizarPedidoAsync(PedidoSoap.Pedido pedido);
+        System.Threading.Tasks.Task<string> AtualizarPedidoAsync(PedidoSoap.Pedido pedido);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPedidoService/ExcluirPedido", ReplyAction="http://tempuri.org/IPedidoService/ExcluirPedidoResponse")]
         System.Threading.Tasks.Task ExcluirPedidoAsync(int id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPedidoService/AdicionarItemAoPedido", ReplyAction="http://tempuri.org/IPedidoService/AdicionarItemAoPedidoResponse")]
-        System.Threading.Tasks.Task AdicionarItemAoPedidoAsync(int pedidoId, PedidoSoap.ItemPedido item);
+        System.Threading.Tasks.Task AdicionarItemAoPedidoAsync(int idPedido, PedidoSoap.ItemPedido item);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPedidoService/RemoverItemDoPedido", ReplyAction="http://tempuri.org/IPedidoService/RemoverItemDoPedidoResponse")]
-        System.Threading.Tasks.Task RemoverItemDoPedidoAsync(int pedidoId, int itemId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPedidoService/AtualizarItemDoPedido", ReplyAction="http://tempuri.org/IPedidoService/AtualizarItemDoPedidoResponse")]
-        System.Threading.Tasks.Task AtualizarItemDoPedidoAsync(int pedidoId, PedidoSoap.ItemPedido item);
+        System.Threading.Tasks.Task RemoverItemDoPedidoAsync(int idPedido, int idItem);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPedidoService/ListarItensDoPedido", ReplyAction="http://tempuri.org/IPedidoService/ListarItensDoPedidoResponse")]
-        System.Threading.Tasks.Task<PedidoSoap.ItemPedido[]> ListarItensDoPedidoAsync(int pedidoId);
+        System.Threading.Tasks.Task<PedidoSoap.ItemPedido[]> ListarItensDoPedidoAsync(int idPedido);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPedidoService/ListarPedidosPorStatus", ReplyAction="http://tempuri.org/IPedidoService/ListarPedidosPorStatusResponse")]
         System.Threading.Tasks.Task<PedidoSoap.Pedido[]> ListarPedidosPorStatusAsync(string status);
@@ -312,7 +324,7 @@ namespace PedidoSoap
         System.Threading.Tasks.Task<PedidoSoap.Pedido[]> ListarPedidosPorClienteAsync(string nomeCliente);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPedidoService/ListarPedidosPorData", ReplyAction="http://tempuri.org/IPedidoService/ListarPedidosPorDataResponse")]
-        System.Threading.Tasks.Task<PedidoSoap.Pedido[]> ListarPedidosPorDataAsync(System.DateTime dataInicial, System.DateTime dataFinal);
+        System.Threading.Tasks.Task<PedidoSoap.Pedido[]> ListarPedidosPorDataAsync(string dataInicial, string dataFinal);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPedidoService/ListarProdutos", ReplyAction="http://tempuri.org/IPedidoService/ListarProdutosResponse")]
         System.Threading.Tasks.Task<PedidoSoap.Produto[]> ListarProdutosAsync();
@@ -321,10 +333,10 @@ namespace PedidoSoap
         System.Threading.Tasks.Task<PedidoSoap.Produto> ObterProdutoPorIdAsync(int id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPedidoService/CriarProduto", ReplyAction="http://tempuri.org/IPedidoService/CriarProdutoResponse")]
-        System.Threading.Tasks.Task<int> CriarProdutoAsync(PedidoSoap.Produto produto);
+        System.Threading.Tasks.Task<string> CriarProdutoAsync(PedidoSoap.Produto produto);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPedidoService/AtualizarProduto", ReplyAction="http://tempuri.org/IPedidoService/AtualizarProdutoResponse")]
-        System.Threading.Tasks.Task AtualizarProdutoAsync(PedidoSoap.Produto produto);
+        System.Threading.Tasks.Task<string> AtualizarProdutoAsync(PedidoSoap.Produto produto);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPedidoService/ExcluirProduto", ReplyAction="http://tempuri.org/IPedidoService/ExcluirProdutoResponse")]
         System.Threading.Tasks.Task ExcluirProdutoAsync(int id);
@@ -390,12 +402,12 @@ namespace PedidoSoap
             return base.Channel.ObterPedidoPorIdAsync(id);
         }
         
-        public System.Threading.Tasks.Task<int> CriarPedidoAsync(PedidoSoap.Pedido pedido)
+        public System.Threading.Tasks.Task<string> CriarPedidoAsync(PedidoSoap.Pedido pedido)
         {
             return base.Channel.CriarPedidoAsync(pedido);
         }
         
-        public System.Threading.Tasks.Task AtualizarPedidoAsync(PedidoSoap.Pedido pedido)
+        public System.Threading.Tasks.Task<string> AtualizarPedidoAsync(PedidoSoap.Pedido pedido)
         {
             return base.Channel.AtualizarPedidoAsync(pedido);
         }
@@ -405,24 +417,19 @@ namespace PedidoSoap
             return base.Channel.ExcluirPedidoAsync(id);
         }
         
-        public System.Threading.Tasks.Task AdicionarItemAoPedidoAsync(int pedidoId, PedidoSoap.ItemPedido item)
+        public System.Threading.Tasks.Task AdicionarItemAoPedidoAsync(int idPedido, PedidoSoap.ItemPedido item)
         {
-            return base.Channel.AdicionarItemAoPedidoAsync(pedidoId, item);
+            return base.Channel.AdicionarItemAoPedidoAsync(idPedido, item);
         }
         
-        public System.Threading.Tasks.Task RemoverItemDoPedidoAsync(int pedidoId, int itemId)
+        public System.Threading.Tasks.Task RemoverItemDoPedidoAsync(int idPedido, int idItem)
         {
-            return base.Channel.RemoverItemDoPedidoAsync(pedidoId, itemId);
+            return base.Channel.RemoverItemDoPedidoAsync(idPedido, idItem);
         }
         
-        public System.Threading.Tasks.Task AtualizarItemDoPedidoAsync(int pedidoId, PedidoSoap.ItemPedido item)
+        public System.Threading.Tasks.Task<PedidoSoap.ItemPedido[]> ListarItensDoPedidoAsync(int idPedido)
         {
-            return base.Channel.AtualizarItemDoPedidoAsync(pedidoId, item);
-        }
-        
-        public System.Threading.Tasks.Task<PedidoSoap.ItemPedido[]> ListarItensDoPedidoAsync(int pedidoId)
-        {
-            return base.Channel.ListarItensDoPedidoAsync(pedidoId);
+            return base.Channel.ListarItensDoPedidoAsync(idPedido);
         }
         
         public System.Threading.Tasks.Task<PedidoSoap.Pedido[]> ListarPedidosPorStatusAsync(string status)
@@ -435,7 +442,7 @@ namespace PedidoSoap
             return base.Channel.ListarPedidosPorClienteAsync(nomeCliente);
         }
         
-        public System.Threading.Tasks.Task<PedidoSoap.Pedido[]> ListarPedidosPorDataAsync(System.DateTime dataInicial, System.DateTime dataFinal)
+        public System.Threading.Tasks.Task<PedidoSoap.Pedido[]> ListarPedidosPorDataAsync(string dataInicial, string dataFinal)
         {
             return base.Channel.ListarPedidosPorDataAsync(dataInicial, dataFinal);
         }
@@ -450,12 +457,12 @@ namespace PedidoSoap
             return base.Channel.ObterProdutoPorIdAsync(id);
         }
         
-        public System.Threading.Tasks.Task<int> CriarProdutoAsync(PedidoSoap.Produto produto)
+        public System.Threading.Tasks.Task<string> CriarProdutoAsync(PedidoSoap.Produto produto)
         {
             return base.Channel.CriarProdutoAsync(produto);
         }
         
-        public System.Threading.Tasks.Task AtualizarProdutoAsync(PedidoSoap.Produto produto)
+        public System.Threading.Tasks.Task<string> AtualizarProdutoAsync(PedidoSoap.Produto produto)
         {
             return base.Channel.AtualizarProdutoAsync(produto);
         }
