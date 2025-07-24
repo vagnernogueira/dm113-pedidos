@@ -13,6 +13,7 @@ namespace dm113_pedidos.ClientConsoleApp
                 Console.WriteLine("Digite 1 para listar os Produtos Disponíveis");
                 Console.WriteLine("Digite 2 para listar os Pedidos");
                 Console.WriteLine("Digite 3 para buscar Pedido por ID do Pedido");
+                Console.WriteLine("Digite 4 para registrar um Pedido");
                 Console.WriteLine("Digite -1 para sair :(");
 
                 Console.WriteLine("Informe sua opção");
@@ -29,6 +30,9 @@ namespace dm113_pedidos.ClientConsoleApp
                     case 3:
                         buscarPedidoId();
                         break;
+                    case 4:
+                        registrarPedido();
+                        break;
                     case -1:
                         Console.Clear();
                         Console.WriteLine("Até logo!");
@@ -41,6 +45,28 @@ namespace dm113_pedidos.ClientConsoleApp
                 Thread.Sleep(1500);
                 Console.Clear();
             }
+        }
+
+        private static void registrarPedido()
+        {
+            PedidoServiceClient client = new PedidoServiceClient(PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService);
+            client.Open();
+            Console.WriteLine("Digite o nome do cliente:");
+            string nomeCliente = Console.ReadLine();
+            var pedido = new Pedido
+            {
+                IdPedido = 0,
+                NomeCliente = nomeCliente,
+                DataPedido = string.Empty,
+                Total = 0,
+                ItemPedidoList = new ItemPedido[0]
+            };
+            var resultadoTask = client.CriarPedidoAsync(pedido);
+            resultadoTask.Wait();
+            var resultado = resultadoTask.Result;
+            Console.WriteLine("Retorno do serviço SOAP. Retorno numérico é o ID do Pedido criado.");
+            Console.WriteLine($" {resultado}");
+            client.Close();
         }
 
         private static void buscarPedidoId()
