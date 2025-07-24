@@ -46,7 +46,18 @@ A escolha de utilizar o SOAP como tecnologia para o desenvolvimento do sistema d
 
 - **Serviço SOAP:** Projeto raiz `dm113-pedidos` que implementa o serviço SOAP utilizando SoapCore. 
 - **Cliente SOAP:** Projeto interno `ClientConsoleApp` que consome o serviço SOAP utilizando WCF com interface em console.
----
+
+### Arquivos fontes importantes
+
+- `Program.cs`
+- `Model/`
+  - `ItemPedido.cs`
+  - `Pedido.cs`
+  - `Produto.cs`
+- `Service/`
+  - `PedidoService.cs`
+- `ClientConsoleApp/`
+  - `Program.cs`
 
 ### Teste e execução
 
@@ -69,3 +80,5 @@ A escolha de utilizar o SOAP como tecnologia para o desenvolvimento do sistema d
 ## Conclusão
 
 O projeto de implementação de um sistema de pedidos utilizando SOAP e WCF em C# foi desenvolvido com sucesso, demonstrando a capacidade de exposição de serviços SOAP e consumo deles em projeto cliente. O uso de SOAP como tecnologia foi justificado pela sua ampla adopção em ambientes corporativos e indústrias, além de ser uma tecnologia consolidada no ecossistema de desenvolvimento de software.
+
+---
