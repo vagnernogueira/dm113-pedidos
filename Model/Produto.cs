@@ -13,10 +13,5 @@ namespace dm113_pedidos.Model
         public string? Descricao { get; set; }
         [DataMember]
         public decimal PrecoUnitario { get; set; }
-
-        public void Print()
-        {
-            Console.WriteLine($"Produto ID: {IdProduto}, Nome: {Nome}, Descrição: {Descricao}, Preço Unitário: {PrecoUnitario:C}");
-        }
     }
 }

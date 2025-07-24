@@ -19,10 +19,5 @@ namespace dm113_pedidos.Model
         public decimal PrecoUnitario { get; set; }
         [DataMember]
         public decimal Total { get; set; }
-
-        public void Print()
-        {
-            Console.WriteLine($"- Pedido ID: {IdPedido}, Item Pedido ID: {IdItemPedido}, Produto ID: {IdProduto}, Nome do Produto: {NomeProduto}, Quantidade: {Quantidade}, Preço Unitário: {PrecoUnitario:C}, Total: {Total:C}");
-        }
     }
 }

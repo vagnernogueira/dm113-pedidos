@@ -8,49 +8,34 @@ namespace dm113_pedidos.Service
     {
         [OperationContract]
         Pedido[] ListarPedidos();
-
         [OperationContract]
         Pedido ObterPedidoPorId(int id);
-
         [OperationContract]
         string CriarPedido(Pedido pedido);
-
         [OperationContract]
         string AtualizarPedido(Pedido pedido);
-
         [OperationContract]
         void ExcluirPedido(int id);
-
         [OperationContract]
         void AdicionarItemAoPedido(int idPedido, ItemPedido item);
-
         [OperationContract]
         void RemoverItemDoPedido(int idPedido, int idItem);
-
         [OperationContract]
         ItemPedido[] ListarItensDoPedido(int idPedido);
-
         [OperationContract]
         Pedido[] ListarPedidosPorStatus(string status);
-
         [OperationContract]
         Pedido[] ListarPedidosPorCliente(string nomeCliente);
-
         [OperationContract]
         Pedido[] ListarPedidosPorData(string dataInicial, string dataFinal);
-
         [OperationContract]
         Produto[] ListarProdutos();
-
         [OperationContract]
         Produto ObterProdutoPorId(int id);
-
         [OperationContract]
         string CriarProduto(Produto produto);
-
         [OperationContract]
         string AtualizarProduto(Produto produto);
-
         [OperationContract]
         void ExcluirProduto(int id);
     }
@@ -78,7 +63,7 @@ namespace dm113_pedidos.Service
         {
             try
             {
-                AjustarDadosProduto(produto);
+                ModelUtil.AjustarDados(produto, produtos);
                 produtos.Add(produto.IdProduto, produto);
                 return produto.IdProduto.ToString();
             }
@@ -91,7 +76,7 @@ namespace dm113_pedidos.Service
         {
             try
             {
-                produtos[produto.IdProduto] = AjustarDadosProduto(produto);
+                produtos[produto.IdProduto] = ModelUtil.AjustarDados(produto, produtos);
                 return produto.IdProduto.ToString();
             }
             catch (Exception e)
@@ -103,7 +88,7 @@ namespace dm113_pedidos.Service
         {
             try
             {
-                return AjustarDadosProduto(produtos[id]);
+                return ModelUtil.AjustarDados(produtos[id], produtos);
             }
             catch (Exception)
             {
@@ -126,7 +111,7 @@ namespace dm113_pedidos.Service
         public Pedido[] ListarPedidos()
         {
             Console.WriteLine("ListarPedidos");
-            printKeys(pedidos);
+            ModelUtil.PrintKeys(pedidos);
             return pedidos.Values.ToArray();
         }
         public Pedido[] ListarPedidosPorCliente(string nomeCliente)
@@ -135,7 +120,6 @@ namespace dm113_pedidos.Service
                 .Where(p => p.NomeCliente.Equals(nomeCliente.Trim(), StringComparison.OrdinalIgnoreCase))
                 .ToArray();
         }
-
         public Pedido[] ListarPedidosPorData(string dataInicial, string dataFinal)
         {
             return pedidos.Values
@@ -145,7 +129,6 @@ namespace dm113_pedidos.Service
                     dataPedido <= DateTime.Parse(dataFinal))
                 .ToArray();
         }
-
         public Pedido[] ListarPedidosPorStatus(string status)
         {
             return pedidos.Values
@@ -155,10 +138,10 @@ namespace dm113_pedidos.Service
         public Pedido ObterPedidoPorId(int id)
         {
             Console.WriteLine("ObterPedidoPorId");
-            printKeys(pedidos);
+            ModelUtil.PrintKeys(pedidos);
             try
             {
-                return AjustarDadosPedido(pedidos[id]);
+                return ModelUtil.AjustarDados(pedidos[id], pedidos);
             }
             catch (Exception)
             {
@@ -169,7 +152,7 @@ namespace dm113_pedidos.Service
         {
             try
             {
-                AjustarDadosPedido(pedido);
+                ModelUtil.AjustarDados(pedido, pedidos);
                 pedidos.Add(pedido.IdPedido, pedido);
                 return pedido.IdPedido.ToString();
             }
@@ -188,18 +171,17 @@ namespace dm113_pedidos.Service
             {
             }
         }
-
         public string AtualizarPedido(Pedido pedido)
         {
             Console.WriteLine("AtualizarPedido");
-            printKeys(pedidos);
+            ModelUtil.PrintKeys(pedidos);
             try
             {
                 if (!pedidos.ContainsKey(pedido.IdPedido))
                 {
                     throw new KeyNotFoundException("Pedido não encontrado.");
                 }
-                AjustarDadosPedido(pedido);
+                ModelUtil.AjustarDados(pedido, pedidos);
                 pedidos[pedido.IdPedido] = pedido;
                 return pedido.IdPedido.ToString();
             }
@@ -208,12 +190,11 @@ namespace dm113_pedidos.Service
                 return e.Message;
             }
         }
-
         public void AdicionarItemAoPedido(int idPedido, ItemPedido item)
         {
             try
             {
-                AjustarDadosPedido(pedidos[idPedido]).ItemPedidoList.Add(item);
+                ModelUtil.AjustarDados(pedidos[idPedido], pedidos).ItemPedidoList.Add(item);
             }
             catch (Exception)
             {
@@ -222,72 +203,11 @@ namespace dm113_pedidos.Service
 
         public ItemPedido[] ListarItensDoPedido(int idPedido)
         {
-            return AjustarDadosPedido(pedidos[idPedido]).ItemPedidoList.ToArray();
+            return ModelUtil.AjustarDados(pedidos[idPedido], pedidos).ItemPedidoList.ToArray();
         }
-
         public void RemoverItemDoPedido(int idPedido, int idItem)
         {
-            AjustarDadosPedido(pedidos[idPedido]).ItemPedidoList.RemoveAll(item => item.IdItemPedido == idItem);
-        }
-
-        /**
-         * Métodos auxiliares para ajustar os dados antes de salvar.
-         */
-        private Produto AjustarDadosProduto(Produto? produto)
-        {
-            if (produto == null)
-            {
-                produto = new Produto();
-            }
-            if (produto.IdProduto <= 0 || !produtos.ContainsKey(produto.IdProduto))
-            {
-                produto.IdProduto = produtos.Keys.Any() ? produtos.Keys.Max() + 1 : 1;
-            }
-            if (string.IsNullOrEmpty(produto.Nome))
-            {
-                produto.Nome = "Produto sem nome";
-            }
-            if (produto.PrecoUnitario <= 0)
-            {
-                produto.PrecoUnitario = 0.01m;
-            }
-            return produto;
-        }
-        private Pedido AjustarDadosPedido(Pedido? pedido)
-        {
-            if (pedido == null)
-            {
-                pedido = new Pedido();
-            }
-            if (pedido.IdPedido <= 0 || !pedidos.ContainsKey(pedido.IdPedido))
-            {
-                pedido.IdPedido = pedidos.Keys.Any() ? pedidos.Keys.Max() + 1 : 1;
-            }
-            if (string.IsNullOrEmpty(pedido.NomeCliente))
-            {
-                pedido.NomeCliente = "Cliente sem nome";
-            }
-            if (string.IsNullOrEmpty(pedido.DataPedido))
-            {
-                pedido.DataPedido = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            }
-            if (pedido.ItemPedidoList == null)
-            {
-                pedido.ItemPedidoList = new List<ItemPedido>();
-            }
-            pedido.Total = pedido.ItemPedidoList.Sum(item => item.PrecoUnitario * item.Quantidade);
-            if (string.IsNullOrEmpty(pedido.Status))
-            {
-                pedido.Status = "Pendente";
-            }
-            return pedido;
-        }
-        private void printKeys<T>(Dictionary<int, T> dict)
-        {
-            foreach (var key in dict.Keys)
-            {
-                Console.WriteLine(key);
-            }
+            ModelUtil.AjustarDados(pedidos[idPedido], pedidos).ItemPedidoList.RemoveAll(item => item.IdItemPedido == idItem);
         }
     }
 }
