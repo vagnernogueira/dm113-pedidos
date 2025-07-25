@@ -52,6 +52,7 @@ A escolha de utilizar o SOAP como tecnologia para o desenvolvimento do sistema d
 - `Program.cs`
 - `Model/`
   - `ItemPedido.cs`
+  - `ModelUtil.cs`
   - `Pedido.cs`
   - `Produto.cs`
 - `Service/`
