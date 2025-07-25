@@ -14,6 +14,7 @@ namespace dm113_pedidos.ClientConsoleApp
                 Console.WriteLine("Digite 2 para listar os Pedidos");
                 Console.WriteLine("Digite 3 para buscar Pedido por ID do Pedido");
                 Console.WriteLine("Digite 4 para registrar um Pedido");
+                Console.WriteLine("Digite 5 para excluir um Pedido");
                 Console.WriteLine("Digite -1 para sair :(");
 
                 Console.WriteLine("Informe sua opção");
@@ -22,16 +23,19 @@ namespace dm113_pedidos.ClientConsoleApp
                 switch (option)
                 {
                     case 1:
-                        listarProdutos();
+                        ListarProdutos();
                         break;
                     case 2:
-                        listarPedidos();
+                        ListarPedidos();
                         break;
                     case 3:
-                        buscarPedidoId();
+                        BuscarPedidoId();
                         break;
                     case 4:
-                        registrarPedido();
+                        RegistrarPedido();
+                        break;
+                    case 5:
+                        ExcluirPedido();
                         break;
                     case -1:
                         Console.Clear();
@@ -46,10 +50,20 @@ namespace dm113_pedidos.ClientConsoleApp
                 Console.Clear();
             }
         }
-
-        private static void registrarPedido()
+        private static void ExcluirPedido()
         {
-            PedidoServiceClient client = new PedidoServiceClient(PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService);
+            PedidoServiceClient client = new (PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService);
+            client.Open();
+            Console.WriteLine("Digite o ID do pedido que deseja excluir:");
+            int idPedido = int.Parse(Console.ReadLine());
+            var resultadoTask = client.ExcluirPedidoAsync(idPedido);
+            resultadoTask.Wait();
+            Console.WriteLine("Operação realizada.");
+            client.Close();
+        }
+        private static void RegistrarPedido()
+        {
+            PedidoServiceClient client = new (PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService);
             client.Open();
             Console.WriteLine("Digite o nome do cliente:");
             string nomeCliente = Console.ReadLine();
@@ -68,10 +82,9 @@ namespace dm113_pedidos.ClientConsoleApp
             Console.WriteLine($" {resultado}");
             client.Close();
         }
-
-        private static void buscarPedidoId()
+        private static void BuscarPedidoId()
         {
-            PedidoServiceClient client = new PedidoServiceClient(PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService);
+            PedidoServiceClient client = new(PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService);
             client.Open();
             Console.WriteLine("Digite o ID do pedido que deseja buscar:");
             int idPedido = int.Parse(Console.ReadLine());
@@ -91,10 +104,9 @@ namespace dm113_pedidos.ClientConsoleApp
                 }
             }
         }
-
-        private static void listarPedidos()
+        private static void ListarPedidos()
         {
-            PedidoServiceClient client = new PedidoServiceClient(PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService);
+            PedidoServiceClient client = new (PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService);
             client.Open();
             Console.WriteLine("Listando pedidos:");
             var pedidosTask = client.ListarPedidosAsync();
@@ -118,10 +130,9 @@ namespace dm113_pedidos.ClientConsoleApp
             }
             client.Close();
         }
-
-        private static void listarProdutos()
+        private static void ListarProdutos()
         {
-            PedidoServiceClient client = new PedidoServiceClient(PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService);
+            PedidoServiceClient client = new (PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService);
             client.Open();
             Console.WriteLine("Listando produtos:");
             var produtosTask = client.ListarProdutosAsync();
