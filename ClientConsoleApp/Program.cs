@@ -14,7 +14,8 @@ namespace dm113_pedidos.ClientConsoleApp
                 Console.WriteLine("Digite 2 para listar os Pedidos");
                 Console.WriteLine("Digite 3 para buscar Pedido por ID do Pedido");
                 Console.WriteLine("Digite 4 para registrar um Pedido");
-                Console.WriteLine("Digite 5 para excluir um Pedido");
+                Console.WriteLine("Digite 5 para adicionar item ao Pedido");
+                Console.WriteLine("Digite 6 para excluir um Pedido");
                 Console.WriteLine("Digite -1 para sair :(");
 
                 Console.WriteLine("Informe sua opção");
@@ -35,11 +36,14 @@ namespace dm113_pedidos.ClientConsoleApp
                         RegistrarPedido();
                         break;
                     case 5:
+                        AdicionarItemPedido();
+                        break;
+                    case 6:
                         ExcluirPedido();
                         break;
                     case -1:
                         Console.Clear();
-                        Console.WriteLine("Até logo!");
+                        Console.WriteLine("Que a Força esteja com você!");
                         exit = true;
                         break;
                     default:
@@ -59,6 +63,31 @@ namespace dm113_pedidos.ClientConsoleApp
             var resultadoTask = client.ExcluirPedidoAsync(idPedido);
             resultadoTask.Wait();
             Console.WriteLine("Operação realizada.");
+            client.Close();
+        }
+        private static void AdicionarItemPedido()
+        {
+            PedidoServiceClient client = new (PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService);
+            client.Open();
+            Console.WriteLine("Digite o ID do pedido ao qual deseja adicionar um item:");
+            int idPedido = int.Parse(Console.ReadLine());
+            Console.WriteLine("Digite o ID do produto que deseja adicionar:");
+            int idProduto = int.Parse(Console.ReadLine());
+            Console.WriteLine("Digite a quantidade do produto:");
+            int quantidade = int.Parse(Console.ReadLine());
+            var itemPedido = new ItemPedido
+            {
+                IdItemPedido = 0,
+                IdPedido = idPedido,
+                IdProduto = idProduto,
+                NomeProduto = string.Empty,
+                Quantidade = quantidade,
+                PrecoUnitario = 0,
+                Total = 0
+            };
+            var resultadoTask = client.AdicionarItemAoPedidoAsync(idPedido, itemPedido);
+            resultadoTask.Wait();
+            Console.WriteLine("Item adicionado ao pedido com sucesso.");
             client.Close();
         }
         private static void RegistrarPedido()
@@ -102,7 +131,10 @@ namespace dm113_pedidos.ClientConsoleApp
                 {
                     Console.WriteLine($"  Item Id: {item.IdItemPedido}, Produto: {item.NomeProduto}, Quantidade: {item.Quantidade}, Preço Unitário: {item.PrecoUnitario}, Preço Final: {item.Total}");
                 }
+                Console.WriteLine("Pessione qualquer tecla para retornar");
+                Console.ReadKey();
             }
+            client.Close();
         }
         private static void ListarPedidos()
         {
@@ -127,6 +159,8 @@ namespace dm113_pedidos.ClientConsoleApp
                         Console.WriteLine($"  Item Id: {item.IdItemPedido}, Produto: {item.NomeProduto}, Quantidade: {item.Quantidade}, Preço Unitário: {item.PrecoUnitario}, Preço Final: {item.Total}");
                     }
                 }
+                Console.WriteLine("Pessione qualquer tecla para retornar");
+                Console.ReadKey();
             }
             client.Close();
         }
@@ -142,6 +176,8 @@ namespace dm113_pedidos.ClientConsoleApp
             {
                 Console.WriteLine($"Id: {produto.IdProduto} Nome: {produto.Nome} Preço: {produto.PrecoUnitario}");
             }
+            Console.WriteLine("Pessione qualquer tecla para retornar");
+            Console.ReadKey();
             client.Close();
         }
     }
