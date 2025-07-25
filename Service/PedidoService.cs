@@ -51,7 +51,7 @@ namespace dm113_pedidos.Service
             { 6, new Produto { IdProduto = 6, Nome = "Console Xbox Series X", Descricao = "Console de videogame da Microsoft", PrecoUnitario = 5799.00m } },
             { 7, new Produto { IdProduto = 7, Nome = "Assinatura Game Pass 12 meses", Descricao = "Xbox Game Pass Ultimate Gpu 12 Meses Codigo Brasileiro Br", PrecoUnitario = 329.99m } }
         };
-        Dictionary<int, Pedido> pedidos = new();
+        Dictionary<int, Pedido> pedidos = [];
         /** 
          * Métodos de serviço para gerenciar PRODUTOS.
          */
