@@ -4,12 +4,16 @@ namespace dm113_pedidos.ClientConsoleApp
 {
     class Program
     {
+        static string url = "http://localhost:5168/Service.asmx";
         static void Main(string[] args)
         {
+            
+
             bool exit = false;
             while (!exit)
             {
-                Console.WriteLine("Bem vindo ao Sistema de Pedidos com SOAP!\n");
+                Console.WriteLine("\nBem vindo ao Sistema de Pedidos com SOAP!\n\n");
+                Console.WriteLine("Digite 0 para informar a URL do servidor SOAP\n");
                 Console.WriteLine("Digite 1 para listar os Produtos Disponíveis");
                 Console.WriteLine("Digite 2 para listar os Pedidos");
                 Console.WriteLine("Digite 3 para buscar Pedido por ID do Pedido");
@@ -23,6 +27,9 @@ namespace dm113_pedidos.ClientConsoleApp
 
                 switch (option)
                 {
+                    case 0:
+                        configuraServidorRemoto();
+                        break;
                     case 1:
                         ListarProdutos();
                         break;
@@ -43,6 +50,7 @@ namespace dm113_pedidos.ClientConsoleApp
                         break;
                     case -1:
                         Console.Clear();
+                        Console.WriteLine("Obrigado.");
                         Console.WriteLine("Que a Força esteja com você!");
                         exit = true;
                         break;
@@ -54,9 +62,29 @@ namespace dm113_pedidos.ClientConsoleApp
                 Console.Clear();
             }
         }
+        private static void configuraServidorRemoto()
+        {
+            Console.WriteLine("Informe a URL http do servidor SOAP. Ex: http://localhost:5000/Service.asmx");
+            string urlInformada = Console.ReadLine();
+            if (string.IsNullOrEmpty(urlInformada) || !isValidURL(urlInformada))
+            {
+                Console.WriteLine($"URL informada é inválida. Será utilizado a URL padrão {url}");
+                Console.WriteLine("Pessione qualquer tecla para retornar");
+                Console.ReadKey();
+            }
+            else
+            {
+                url = urlInformada;
+            }
+        }
+        private static bool isValidURL(string url)
+        {
+            return Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult)
+                && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+        }
         private static void ExcluirPedido()
         {
-            PedidoServiceClient client = new (PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService);
+            PedidoServiceClient client = new(PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService, url);
             client.Open();
             Console.WriteLine("Digite o ID do pedido que deseja excluir:");
             int idPedido = int.Parse(Console.ReadLine());
@@ -67,7 +95,7 @@ namespace dm113_pedidos.ClientConsoleApp
         }
         private static void AdicionarItemPedido()
         {
-            PedidoServiceClient client = new (PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService);
+            PedidoServiceClient client = new(PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService, url);
             client.Open();
             Console.WriteLine("Digite o ID do pedido ao qual deseja adicionar um item:");
             int idPedido = int.Parse(Console.ReadLine());
@@ -92,7 +120,7 @@ namespace dm113_pedidos.ClientConsoleApp
         }
         private static void RegistrarPedido()
         {
-            PedidoServiceClient client = new (PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService);
+            PedidoServiceClient client = new(PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService, url);
             client.Open();
             Console.WriteLine("Digite o nome do cliente:");
             string nomeCliente = Console.ReadLine();
@@ -109,11 +137,13 @@ namespace dm113_pedidos.ClientConsoleApp
             var resultado = resultadoTask.Result;
             Console.WriteLine("Retorno do serviço SOAP. Retorno numérico é o ID do Pedido criado.");
             Console.WriteLine($" {resultado}");
+            Console.WriteLine("Pessione qualquer tecla para retornar");
+            Console.ReadKey();
             client.Close();
         }
         private static void BuscarPedidoId()
         {
-            PedidoServiceClient client = new(PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService);
+            PedidoServiceClient client = new(PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService, url);
             client.Open();
             Console.WriteLine("Digite o ID do pedido que deseja buscar:");
             int idPedido = int.Parse(Console.ReadLine());
@@ -138,7 +168,7 @@ namespace dm113_pedidos.ClientConsoleApp
         }
         private static void ListarPedidos()
         {
-            PedidoServiceClient client = new (PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService);
+            PedidoServiceClient client = new(PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService, url);
             client.Open();
             Console.WriteLine("Listando pedidos:");
             var pedidosTask = client.ListarPedidosAsync();
@@ -166,7 +196,7 @@ namespace dm113_pedidos.ClientConsoleApp
         }
         private static void ListarProdutos()
         {
-            PedidoServiceClient client = new (PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService);
+            PedidoServiceClient client = new(PedidoServiceClient.EndpointConfiguration.BasicHttpBinding_IPedidoService, url);
             client.Open();
             Console.WriteLine("Listando produtos:");
             var produtosTask = client.ListarProdutosAsync();
