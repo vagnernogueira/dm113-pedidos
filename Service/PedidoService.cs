@@ -194,7 +194,22 @@ namespace dm113_pedidos.Service
         {
             try
             {
-                ModelUtil.AjustarDados(pedidos[idPedido], pedidos).ItemPedidoList.Add(item);
+                Pedido pedido = ModelUtil.AjustarDados(pedidos[idPedido], pedidos);
+                bool novoItem = true;
+                foreach (var itemExistente in pedido.ItemPedidoList)
+                {
+                    if (itemExistente.IdProduto == item.IdProduto)
+                    {
+                        itemExistente.Quantidade += item.Quantidade;
+                        novoItem = false;
+                        break;
+                    }
+                }
+                if (novoItem)
+                {
+                    item = ModelUtil.AjustarDados(item, pedido, produtos);
+                    pedido.ItemPedidoList.Add(item);
+                }
             }
             catch (Exception)
             {

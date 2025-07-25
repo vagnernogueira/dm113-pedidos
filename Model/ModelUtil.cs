@@ -121,5 +121,26 @@
             }
             return pedido;
         }
+        public static ItemPedido AjustarDados(ItemPedido item, Pedido pedido, Dictionary<int, Produto> produtos)
+        {
+            if (item.IdItemPedido <= 0 || !pedido.ItemPedidoList.Contains(item))
+            {
+                item.IdItemPedido = GetNextKey(pedido.ItemPedidoList.ToDictionary(i => i.IdItemPedido, i => i));
+            }
+            if (string.IsNullOrEmpty(item.NomeProduto))
+            {
+                item.NomeProduto = produtos.ContainsKey(item.IdProduto) ? produtos[item.IdProduto].Nome : "Produto sem nome";
+            }
+            if (item.Quantidade <= 0)
+            {
+                item.Quantidade = 1;
+            }
+            if (item.PrecoUnitario <= 0)
+            {
+                item.PrecoUnitario = produtos.ContainsKey(item.IdProduto) ? produtos[item.IdProduto].PrecoUnitario : 0.01m;
+            }
+            item.Total = item.Quantidade * item.PrecoUnitario;           
+            return item;
+        }
     }
 }
